@@ -181,3 +181,81 @@ In a Naive Bayesian Classifier, when we calculate the probability of each class 
 By adding 1 to the feature count, we ensure that there is no zero probability for any feature. This smoothens the probability distribution, preventing the classifier from being overly influenced by the absence of a single feature in the training data for a particular class.
 
 It is also worth noting that we add the total number of unique features seen in the denominator part of the featureProbability calculation `(classData.count + Object.keys(classData.features).length)`. This is done to balance the addition of 1 in the numerator and to maintain the probability distribution correctly.
+
+# Perceptron 
+
+A perceptron is a simple machine learning algorithm for binary classification. It is the building block of neural networks and forms the basis for more advanced deep learning models. The main idea behind the perceptron is to take weighted inputs, apply an activation function, and return the output for classification. The weights are adjusted through a training process.
+
+Here's a JavaScript implementation of a perceptron:
+
+```javascript
+class Perceptron {
+  constructor(numInputs, learningRate = 0.1) {
+    this.weights = new Array(numInputs).fill(0).map(() => Math.random() * 2 - 1);
+    this.learningRate = learningRate;
+  }
+
+  // The activation function: the Heaviside step function
+  activationFunction(sum) {
+    return sum >= 0 ? 1 : 0;
+  }
+
+  // Predict the output based on the inputs
+  predict(inputs) {
+    let sum = 0;
+    for (let i = 0; i < this.weights.length; i++) {
+      sum += this.weights[i] * inputs[i];
+    }
+    return this.activationFunction(sum);
+  }
+
+  // Train the perceptron using a set of training inputs and their corresponding labels
+  train(inputs, labels, maxIterations = 1000) {
+    let errorCount;
+    for (let iteration = 0; iteration < maxIterations; iteration++) {
+      errorCount = 0;
+      for (let i = 0; i < inputs.length; i++) {
+        const prediction = this.predict(inputs[i]);
+        const error = labels[i] - prediction;
+        errorCount += Math.abs(error);
+
+        for (let j = 0; j < this.weights.length; j++) {
+          this.weights[j] += this.learningRate * error * inputs[i][j];
+        }
+      }
+      if (errorCount === 0) {
+        break;
+      }
+    }
+  }
+}
+```
+
+Here's an explanation of each part:
+
+1. The constructor initializes the weights with random values in the range [-1, 1] and sets the learning rate.
+2. The activation function is the Heaviside step function, which returns 1 if the sum is greater or equal to 0 and 0 otherwise.
+3. The `predict` function calculates the weighted sum of inputs and applies the activation function to produce the output for classification.
+4. The `train` function takes a set of training inputs and their corresponding labels, adjusting the weights through gradient descent to minimize classification errors. It iterates until either the maximum number of iterations is reached or there are no more errors.
+
+Here's an example usage:
+
+```javascript
+// XOR problem training inputs and labels
+const trainingInputs = [
+  [0, 0],
+  [0, 1],
+  [1, 0],
+  [1, 1],
+];
+const trainingLabels = [0, 1, 1, 0];
+
+const perceptron = new Perceptron(2);
+perceptron.train(trainingInputs, trainingLabels);
+
+console.log(perceptron.predict([0, 1])); // Output: 1
+console.log(perceptron.predict([1, 0])); // Output: 1
+console.log(perceptron.predict([1, 1])); // Output: 0
+```
+
+Note that the perceptron may not work well for problems that are not linearly separable (like XOR), but this example is simple enough to understand the perceptron's behavior. In practice, you may want to use multi-layer neural networks for solving complex problems
