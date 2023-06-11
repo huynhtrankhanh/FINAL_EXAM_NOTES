@@ -1,3 +1,5 @@
+# K-means
+
 Sure, here's a simple implementation of the K-means clustering algorithm in JavaScript without using libraries. Please note that this implementation assumes that you are familiar with basic JavaScript array manipulation methods and syntax.
 
 ```javascript
@@ -94,3 +96,80 @@ Here's the explanation of the code:
 4. `kMeansClustering`: The main K-means clustering function that takes input data, the desired number of clusters (k) and the maximum number of iterations.
 
 The example usage at the end of the code demonstrates how you could run the K-means algorithm on a simple dataset, and print the cluster centroids and assignments of data points to the clusters.
+
+# Naive Bayes 
+
+A Naive Bayesian Classifier is a machine learning algorithm used to classify objects into classes using the Bayes' Theorem. It assumes that the presence of a feature in a class is unrelated to the presence of any other feature. In simple terms, it believes every feature contributes independently to the probability of the class.
+
+Here's the JavaScript code for a simple Naive Bayesian Classifier:
+
+```javascript
+class NaiveBayesianClassifier {
+  constructor() {
+    this.classes = {};
+    this.totalExamples = 0;
+  }
+
+  // Train the model with new example and its assigned class
+  train(example, className) {
+    this.totalExamples++;
+    if (!this.classes.hasOwnProperty(className)) {
+      this.classes[className] = {
+        count: 0,
+        features: {},
+      };
+    }
+
+    const classData = this.classes[className];
+    classData.count++;
+
+    for (const feature of example) {
+      if (!classData.features.hasOwnProperty(feature)) {
+        classData.features[feature] = 0;
+      }
+
+      classData.features[feature]++;
+    }
+  }
+
+  // Classify the given example using the trained model
+  classify(example) {
+    const probabilities = [];
+
+    for (const className in this.classes) {
+      const classData = this.classes[className];
+      let probability = Math.log(classData.count / this.totalExamples);
+
+      for (const feature of example) {
+        const featureCount = classData.features.hasOwnProperty(feature)
+          ? classData.features[feature]
+          : 0;
+        const featureProbability =
+          (featureCount + 1) / (classData.count + Object.keys(classData.features).length);
+        probability += Math.log(featureProbability);
+      }
+
+      probabilities.push({ className, probability });
+    }
+
+    probabilities.sort((a, b) => b.probability - a.probability);
+    return probabilities[0].className; // Return the class with the highest probability
+  }
+}
+
+```
+
+Usage:
+```javascript
+const classifier = new NaiveBayesianClassifier();
+classifier.train(["weather=sunny", "wind=low"], "play");
+classifier.train(["weather=rainy", "wind=high"], "not_play");
+classifier.train(["weather=sunny", "wind=high"], "not_play");
+classifier.train(["weather=sunny", "wind=low"], "play");
+
+console.log(classifier.classify(["weather=sunny", "wind=high"])); // Output: not_play
+```
+
+In this example, we've created a `NaiveBayesianClassifier` class with two methods, `train()` for training our model and `classify()` to classify new examples. An example is an array of features.
+
+In the usage example, we train the classifier with weather and wind features to decide whether to play or not. Then, we test the classifier on new data to see if we should play or not.
