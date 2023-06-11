@@ -173,3 +173,11 @@ console.log(classifier.classify(["weather=sunny", "wind=high"])); // Output: not
 In this example, we've created a `NaiveBayesianClassifier` class with two methods, `train()` for training our model and `classify()` to classify new examples. An example is an array of features.
 
 In the usage example, we train the classifier with weather and wind features to decide whether to play or not. Then, we test the classifier on new data to see if we should play or not.
+
+The reason we add 1 to the feature count is to apply a technique called "Laplace smoothing" or "additive smoothing". It's a technique used to handle cases where a given feature has not been observed in the training data for a particular class.
+
+In a Naive Bayesian Classifier, when we calculate the probability of each class for a given example, we multiply the probabilities of each feature occurring in that class. If a feature is not present in the training data of a class, its count would be 0, and hence the probability would be 0. This would lead to the entire probability of the class being 0, which is not desirable as it eliminates the entire class based on a single missing feature.
+
+By adding 1 to the feature count, we ensure that there is no zero probability for any feature. This smoothens the probability distribution, preventing the classifier from being overly influenced by the absence of a single feature in the training data for a particular class.
+
+It is also worth noting that we add the total number of unique features seen in the denominator part of the featureProbability calculation `(classData.count + Object.keys(classData.features).length)`. This is done to balance the addition of 1 in the numerator and to maintain the probability distribution correctly.
