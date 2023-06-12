@@ -1581,3 +1581,104 @@ elementB.accept(visitor);
 ```
 
 These design patterns and code snippets provide a foundation for creating maintainable and extensible Java applications. By understanding these patterns and applying them appropriately, you can create higher-quality software that is easier to understand and modify.
+
+In Java, access modifiers are keywords that determine the visibility and accessibility of class members (i.e., variables, methods, and inner classes). There are three main access modifiers: private, protected, and public.
+
+1. private:
+
+The private access modifier is the most restrictive one. It limits the visibility of a class member only to the class where it's defined. No other class (including subclasses) can access private members.
+
+Example:
+
+```java
+class Animal {
+    private String species;
+
+    private void setSpecies(String species) {
+        this.species = species;
+    }
+}
+
+class Dog extends Animal {
+    void setDogSpecies(String species) {
+        // This will result in a compile-time error since setSpecies is private in the Animal class
+        setSpecies(species);
+    }
+}
+```
+
+2. protected:
+
+The protected access modifier allows the class member to be accessed within the class it's defined in, its subclasses, and any other classes within the same package.
+
+Example:
+
+```java
+package animal;
+
+public class Animal {
+    protected String species;
+
+    protected void setSpecies(String species) {
+        this.species = species;
+    }
+}
+
+package animal;
+
+public class Dog extends Animal {
+    void setDogSpecies(String species) {
+        // This is valid since setSpecies is protected and Dog is a subclass of Animal
+        setSpecies(species);
+    }
+}
+
+package client;
+
+import animal.Animal;
+
+public class AnimalClient {
+    public static void main(String[] args) {
+        Animal animal = new Animal();
+        // This will result in a compile-time error since setSpecies is protected
+        // and AnimalClient is not in the same package as Animal
+        animal.setSpecies("mammal");
+    }
+}
+```
+
+3. public:
+
+The public access modifier allows the class member to be accessed from any class, regardless of package or inheritance.
+
+Example:
+
+```java
+package animal;
+
+public class Animal {
+    public String species;
+
+    public void setSpecies(String species) {
+        this.species = species;
+    }
+}
+
+package client;
+
+import animal.Animal;
+
+public class AnimalClient {
+    public static void main(String[] args) {
+        Animal animal = new Animal();
+        // This is valid since setSpecies is public
+        animal.setSpecies("mammal");
+    }
+}
+```
+
+In summary:
+
+- private: accessible only within the class it's defined in.
+- protected: accessible within the class it's defined in, its subclasses, and classes in the same package.
+- public: accessible from any class, regardless of package or inheritance.
