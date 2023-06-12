@@ -240,3 +240,307 @@ Chapter 7: Related Concepts and Tips
 4. Debugging: Learn how to use debugging tools in your IDE to find and fix issues in your code.
 
 Keep practicing and attempting coding problems related to OOP, Java I/O, design patterns, and generics. Regularly review these fundamental concepts, and you'll be sure to ace your scholarship requirements. Good luck!
+
+# SOLID Principles in Java
+
+SOLID is a set of five design principles that help in writing clean, maintainable, and reusable code. These principles were introduced by Robert C. Martin and are widely used in Object-Oriented Programming (OOP). The SOLID acronym represents the following principles:
+
+1. **S**ingle Responsibility Principle (SRP)
+2. **O**pen/Closed Principle (OCP)
+3. **L**iskov Substitution Principle (LSP)
+4. **I**nterface Segregation Principle (ISP)
+5. **D**ependency Inversion Principle (DIP)
+
+## 1. Single Responsibility Principle (SRP)
+
+This principle states that a class should have only one reason to change, meaning that it should have only one job. It increases the cohesion of the class and makes it easier to maintain.
+
+### Example
+
+Before applying SRP:
+
+```java
+public class Employee {
+    private String name;
+    private String email;
+
+    // Employee properties and methods
+    // ...
+
+    public void saveEmployee() {
+        // code to save employee in a database or file
+    }
+}
+```
+
+After applying SRP:
+
+```java
+public class Employee {
+    private String name;
+    private String email;
+
+    // Employee properties and methods
+    // ...
+}
+
+class EmployeeStorage {
+    public void saveEmployee(Employee employee) {
+        // code to save employee in database or file
+    }
+}
+```
+
+## 2. Open/Closed Principle (OCP)
+
+According to this principle, software entities (classes, modules, functions, etc.) should be open for extension but closed for modification. In other words, the existing code should not be altered while adding new functionality to the application.
+
+### Example
+
+Before applying OCP:
+
+```java
+public class AreaCalculator {
+    public double calculateArea(Object[] shapes) {
+        double area = 0;
+        for (Object shape : shapes) {
+            if (shape instanceof Circle) {
+                Circle circle = (Circle) shape;
+                area += Math.PI * Math.pow(circle.radius, 2);
+            } else if (shape instanceof Square) {
+                Square square = (Square) shape;
+                area += square.side * square.side;
+            }
+        }
+        return area;
+    }
+}
+```
+
+After applying OCP:
+
+```java
+public interface Shape {
+    double calculateArea();
+}
+
+public class Circle implements Shape {
+    private double radius;
+
+    // ...
+
+    public double calculateArea() {
+        return Math.PI * Math.pow(radius, 2);
+    }
+}
+
+public class Square implements Shape {
+    private double side;
+
+    // ...
+
+    public double calculateArea() {
+        return side * side;
+    }
+}
+
+public class AreaCalculator {
+    public double calculateArea(Shape[] shapes) {
+        double area = 0;
+        for (Shape shape : shapes) {
+            area += shape.calculateArea();
+        }
+        return area;
+    }
+}
+```
+
+## 3. Liskov Substitution Principle (LSP)
+
+This principle states that objects of a derived class should be able to replace objects of the base class without affecting the correctness of the program.
+
+### Example
+
+Before applying LSP:
+
+```java
+public class Rectangle {
+    protected int width;
+    protected int height;
+
+   // Constructors, Getters, and Setters...
+}
+
+public class Square extends Rectangle {
+    public void setWidth(int width) {
+        this.width = width;
+        this.height = width;
+    }
+
+    public void setHeight(int height) {
+        this.width = height;
+        this.height = height;
+    }
+}
+```
+
+After applying LSP:
+
+```java
+public interface Shape {
+    int calculateArea();
+}
+
+public class Rectangle implements Shape {
+    private int width;
+    private int height;
+
+   // Constructors, Getters, and Setters...
+
+    public int calculateArea() {
+        return width * height;
+    }
+}
+
+public class Square implements Shape {
+    private int side;
+
+   // Constructors, Getters, and Setters...
+
+    public int calculateArea() {
+        return side * side;
+    }
+}
+```
+
+## 4. Interface Segregation Principle (ISP)
+
+This principle states that a class should not be forced to implement interfaces it does not use. Instead of defining large interfaces, it's better to split them into smaller and more specific ones.
+
+### Example
+
+Before applying ISP:
+
+```java
+public interface Printer {
+    void print();
+    void scan();
+    void fax();
+}
+
+public class BasicPrinter implements Printer {
+    public void print() {
+        // Print functionality
+    }
+
+    public void scan() {
+        // Not needed for a basic printer
+        throw new UnsupportedOperationException("Basic printer does not support scanning");
+    }
+
+    public void fax() {
+        // Not needed for a basic printer
+        throw new UnsupportedOperationException("Basic printer does not support faxing");
+    }
+}
+```
+
+After applying ISP:
+
+```java
+public interface Printer {
+    void print();
+}
+
+public interface Scanner {
+    void scan();
+}
+
+public interface Fax {
+    void fax();
+}
+
+public class BasicPrinter implements Printer {
+    public void print() {
+        // Print functionality
+    }
+}
+
+public class AllInOnePrinter implements Printer, Scanner, Fax {
+    public void print() {
+        // Print functionality
+    }
+
+    public void scan() {
+        // Scan functionality
+    }
+
+    public void fax() {
+        // Fax functionality
+    }
+}
+```
+
+## 5. Dependency Inversion Principle (DIP)
+
+This principle states that high-level modules should not depend on low-level modules; both should depend on abstractions. Also, abstractions should not depend on details; details should depend on abstractions.
+
+### Example
+
+Before applying DIP:
+
+```java
+public class TextNotifier {
+    private EmailService emailService;
+
+    public TextNotifier() {
+        this.emailService = new EmailService();
+    }
+
+    public void notify(String message) {
+        emailService.sendEmail(message);
+    }
+}
+
+public class EmailService {
+    public void sendEmail(String message) {
+        // Code to send email
+    }
+}
+```
+
+After applying DIP:
+
+```java
+public interface Notifier {
+    void notify(String message);
+}
+
+public class TextNotifier {
+    private Notifier notifier;
+
+    public TextNotifier(Notifier notifier) {
+        this.notifier = notifier;
+    }
+
+    public void notify(String message) {
+        notifier.notify(message);
+    }
+}
+
+public class EmailService implements Notifier {
+    public void notify(String message) {
+        // Code to send email
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Notifier emailNotifier = new EmailService();
+        TextNotifier textNotifier = new TextNotifier(emailNotifier);
+        textNotifier.notify("Sample message");
+    }
+}
+```
+
+Following the SOLID principles can significantly improve the design, maintainability, and reusability of your code, making it more robust and flexible.
