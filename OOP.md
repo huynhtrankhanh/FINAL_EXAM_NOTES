@@ -1724,3 +1724,39 @@ public class SimpleIOExample {
 }
 ```
 This Java program demonstrates simple input/output operations using stdin (System.in, BufferedReader) and stdout (System.out, PrintWriter). It reads a user's name, age, height, and asks whether they love programming, and then prints the input back to the console.
+
+```java
+import java.util.Scanner;
+
+public class SimpleIOUsingScanner {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Welcome to Simple I/O Example using Scanner!");
+
+        System.out.print("Enter your name: ");
+        String name = scanner.nextLine();
+
+        System.out.print("Enter your age: ");
+        int age = scanner.nextInt();
+
+        System.out.print("Enter your height (in meters): ");
+        float height = scanner.nextFloat();
+
+        System.out.print("Do you love programming? (true/false): ");
+        boolean lovesProgramming = scanner.nextBoolean();
+
+        System.out.println("\nYour details:");
+        System.out.println("Name: " + name);
+        System.out.println("Age: " + age);
+        System.out.println("Height: " + height + " meters");
+        System.out.println("Loves Programming: " + lovesProgramming);
+
+        scanner.close();
+    }
+
+}
+```
+
+This Java program demonstrates simple input/output operations using the `Scanner` class. It reads a user's name, age, height, and asks whether they love programming, and then prints the input back to the console.
