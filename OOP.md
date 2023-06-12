@@ -544,3 +544,1040 @@ public class Main {
 ```
 
 Following the SOLID principles can significantly improve the design, maintainability, and reusability of your code, making it more robust and flexible.
+
+# Design Patterns in Java
+
+Design patterns represent reusable solutions to common software design challenges. They do not pertain to specific algorithms or programming languages but rather to the design and organization of classes and interfaces. As a result, these patterns can be used in any object-oriented programming language, including Java.
+
+This document introduces some of the most commonly used design patterns in Java, along with their respective code snippets.
+
+## Table of Contents
+
+1. [Singleton Pattern](#singleton-pattern)
+2. [Factory Pattern](#factory-pattern)
+3. [Abstract Factory Pattern](#abstract-factory-pattern)
+4. [Builder Pattern](#builder-pattern)
+5. [Prototype Pattern](#prototype-pattern)
+6. [Adapter Pattern](#adapter-pattern)
+7. [Bridge Pattern](#bridge-pattern)
+8. [Composite Pattern](#composite-pattern)
+9. [Decorator Pattern](#decorator-pattern)
+10. [Facade Pattern](#facade-pattern)
+11. [Flyweight Pattern](#flyweight-pattern)
+12. [Proxy Pattern](#proxy-pattern)
+13. [Chain of Responsibility Pattern](#chain-of-responsibility-pattern)
+14. [Command Pattern](#command-pattern)
+15. [Iterator Pattern](#iterator-pattern)
+16. [Mediator Pattern](#mediator-pattern)
+17. [Memento Pattern](#memento-pattern)
+18. [Observer Pattern](#observer-pattern)
+19. [State Pattern](#state-pattern)
+20. [Strategy Pattern](#strategy-pattern)
+21. [Template Method Pattern](#template-method-pattern)
+22. [Visitor Pattern](#visitor-pattern)
+
+## Singleton Pattern
+
+The Singleton pattern ensures that a class has only one instance and provides a global point of access to that instance. It is useful when you want a single object to coordinate actions across the system.
+
+Here's a basic implementation of the Singleton pattern in Java:
+
+```java
+public class Singleton {
+
+    private static Singleton instance;
+
+    // Prevent direct instantiation
+    private Singleton() {}
+
+    public static Singleton getInstance() {
+        if (instance == null) {
+            instance = new Singleton();
+        }
+        return instance;
+    }
+}
+```
+
+## Factory Pattern
+
+The Factory pattern defines an interface for creating objects in a superclass, but allows subclasses to alter the type of objects that will be created. It is useful when a class cannot anticipate the class of objects it must create or when a class wants its subclasses to specify the objects it creates.
+
+```java
+abstract class Car {
+    // Common properties and methods for all cars
+}
+
+class Ferrari extends Car {
+    // Ferrari-specific properties
+}
+
+class Lamborghini extends Car {
+    // Lamborghini-specific properties
+}
+
+class CarFactory {
+    public static Car createCar(String carType) {
+        if (carType.equalsIgnoreCase("Ferrari")) {
+            return new Ferrari();
+        } else if (carType.equalsIgnoreCase("Lamborghini")) {
+            return new Lamborghini();
+        }
+        return null;
+    }
+}
+
+// Usage:
+Car car = CarFactory.createCar("Ferrari");
+```
+
+## Abstract Factory Pattern
+
+The Abstract Factory pattern provides an interface for creating families of related or dependent objects without specifying their concrete classes.
+
+```java
+interface AbstractCarFactory {
+    Car createCar();
+}
+
+class FerrariFactory implements AbstractCarFactory {
+    @Override
+    public Car createCar() {
+        return new Ferrari();
+    }
+}
+
+class LamborghiniFactory implements AbstractCarFactory {
+    @Override
+    public Car createCar() {
+        return new Lamborghini();
+    }
+}
+
+// Usage:
+AbstractCarFactory factory = new FerrariFactory();
+Car car = factory.createCar();
+```
+
+## Builder Pattern
+
+The Builder pattern separates the construction of a complex object from its representation so that the same construction process can create different representations. It is useful when you need to assemble a complex object with various parts.
+
+```java
+class Pizza {
+    private String dough;
+    private String sauce;
+    private String topping;
+
+    public void setDough(String dough) {
+        this.dough = dough;
+    }
+
+    public void setSauce(String sauce) {
+        this.sauce = sauce;
+    }
+
+    public void setTopping(String topping) {
+        this.topping = topping;
+    }
+}
+
+abstract class PizzaBuilder {
+    protected Pizza pizza;
+
+    public void createNewPizzaProduct() {
+        pizza = new Pizza();
+    }
+
+    public Pizza getPizza() {
+        return pizza;
+    }
+
+    public abstract void buildDough();
+
+    public abstract void buildSauce();
+
+    public abstract void buildTopping();
+}
+
+class HawaiianPizzaBuilder extends PizzaBuilder {
+    @Override
+    public void buildDough() {
+        pizza.setDough("cross");
+    }
+
+    @Override
+    public void buildSauce() {
+        pizza.setSauce("mild");
+    }
+
+    @Override
+    public void buildTopping() {
+        pizza.setTopping("ham and pineapple");
+    }
+}
+
+class Waiter {
+    private PizzaBuilder pizzaBuilder;
+
+    public void setPizzaBuilder(PizzaBuilder pizzaBuilder) {
+        this.pizzaBuilder = pizzaBuilder;
+    }
+
+    public Pizza getPizza() {
+        return pizzaBuilder.getPizza();
+    }
+
+    public void constructPizza() {
+        pizzaBuilder.createNewPizzaProduct();
+        pizzaBuilder.buildDough();
+        pizzaBuilder.buildSauce();
+        pizzaBuilder.buildTopping();
+    }
+}
+
+// Usage:
+Waiter waiter = new Waiter();
+PizzaBuilder hawaiianPizzaBuilder = new HawaiianPizzaBuilder();
+
+waiter.setPizzaBuilder(hawaiianPizzaBuilder);
+waiter.constructPizza();
+
+Pizza pizza = waiter.getPizza();
+```
+
+## Prototype Pattern
+
+The Prototype pattern allows you to create a new instance of a class by copying the state of an existing instance. This is useful when object construction costs are high or when creating an object requires a complex process.
+
+```java
+abstract class Prototype implements Cloneable {
+    public Prototype clone() {
+        try {
+            return (Prototype) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+}
+
+class ConcretePrototype extends Prototype {
+    // ConcretePrototype-specific properties
+}
+
+// Usage:
+ConcretePrototype original = new ConcretePrototype();
+ConcretePrototype clone = original.clone();
+```
+
+## Adapter Pattern
+
+The Adapter pattern allows classes with incompatible interfaces to work together by wrapping the existing class with a new interface. It is useful when you want to reuse existing classes without modifying them.
+
+```java
+// Existing interface
+interface OldInterface {
+    void oldMethod();
+}
+
+// New interface
+interface NewInterface {
+    void newMethod();
+}
+
+class OldClass implements OldInterface {
+    @Override
+    public void oldMethod() {
+        // Implementation
+    }
+}
+
+class Adapter implements NewInterface {
+    private OldInterface oldObject;
+
+    public Adapter(OldInterface oldObject) {
+        this.oldObject = oldObject;
+    }
+
+    @Override
+    public void newMethod() {
+        oldObject.oldMethod();
+    }
+}
+
+// Usage:
+OldInterface oldObject = new OldClass();
+NewInterface newObject = new Adapter(oldObject);
+newObject.newMethod();
+```
+
+## Bridge Pattern
+
+The Bridge pattern decouples an abstraction from its implementation, allowing them to vary independently. This is useful when you want to share an implementation among multiple objects while keeping the implementation hidden.
+
+```java
+interface Renderer {
+    void render();
+}
+
+class OpenGLRenderer implements Renderer {
+    @Override
+public void render() {
+        // OpenGL-specific rendering implementation
+    }
+}
+
+class DirectXRenderer implements Renderer {
+    @Override
+    public void render() {
+        // DirectX-specific rendering implementation
+    }
+}
+
+abstract class Shape {
+    protected Renderer renderer;
+
+    public Shape(Renderer renderer) {
+        this.renderer = renderer;
+    }
+
+    public abstract void draw();
+}
+
+class Square extends Shape {
+    public Square(Renderer renderer) {
+        super(renderer);
+    }
+
+    @Override
+    public void draw() {
+        renderer.render();
+    }
+}
+
+// Usage:
+Renderer openGLRenderer = new OpenGLRenderer();
+Shape square = new Square(openGLRenderer);
+square.draw();
+```
+
+## Composite Pattern
+
+The Composite pattern allows you to compose objects into tree structures to represent part-whole hierarchies. This is useful when you want clients to treat individual objects and compositions of objects uniformly.
+
+```java
+interface Component {
+    void operation();
+}
+
+class Leaf implements Component {
+    @Override
+    public void operation() {
+        // Leaf-specific implementation
+    }
+}
+
+class Composite implements Component {
+    private List<Component> components = new ArrayList<>();
+
+    public void add(Component component) {
+        components.add(component);
+    }
+
+    public void remove(Component component) {
+        components.remove(component);
+    }
+
+    @Override
+    public void operation() {
+        for (Component component : components) {
+            component.operation();
+        }
+    }
+}
+
+// Usage:
+Composite composite = new Composite();
+composite.add(new Leaf());
+composite.add(new Leaf());
+composite.operation();
+```
+
+## Decorator Pattern
+
+The Decorator pattern attaches additional responsibilities to an object dynamically without modifying its structure. This is useful when you need to add new functionality to objects without affecting other objects of the same class.
+
+```java
+interface Component {
+    void operation();
+}
+
+class ConcreteComponent implements Component {
+    @Override
+    public void operation() {
+        // Implementation
+    }
+}
+
+abstract class Decorator implements Component {
+    protected Component component;
+
+    public Decorator(Component component) {
+        this.component = component;
+    }
+
+    public abstract void operation();
+}
+
+class ConcreteDecorator extends Decorator {
+    public ConcreteDecorator(Component component) {
+        super(component);
+    }
+
+    @Override
+    public void operation() {
+        component.operation();
+        // New functionality
+    }
+}
+
+// Usage:
+Component component = new ConcreteComponent();
+Component decorator = new ConcreteDecorator(component);
+decorator.operation();
+```
+
+## Facade Pattern
+
+The Facade pattern provides a unified interface to a set of interfaces in a subsystem. This is useful when you want to simplify the usage of a complex system by providing a single entry point.
+
+```java
+class SubsystemA {
+    public void operationA() {
+        // Implementation
+    }
+}
+
+class SubsystemB {
+    public void operationB() {
+        // Implementation
+    }
+}
+
+class Facade {
+    private SubsystemA subsystemA;
+    private SubsystemB subsystemB;
+
+    public Facade() {
+        subsystemA = new SubsystemA();
+        subsystemB = new SubsystemB();
+    }
+
+    public void operation() {
+        subsystemA.operationA();
+        subsystemB.operationB();
+    }
+}
+
+// Usage:
+Facade facade = new Facade();
+facade.operation();
+```
+
+## Flyweight Pattern
+
+The Flyweight pattern minimizes memory usage by sharing as much data as possible with other similar objects. This is useful when you have a large number of objects that have some shared state.
+
+```java
+class Flyweight {
+    private String sharedState;
+
+    public Flyweight(String sharedState) {
+        this.sharedState = sharedState;
+    }
+
+    public void operation(String uniqueState) {
+        // Implementation using sharedState and uniqueState
+    }
+}
+
+class FlyweightFactory {
+    private Map<String, Flyweight> flyweights = new HashMap<>();
+
+    public Flyweight getFlyweight(String key) {
+        Flyweight flyweight = flyweights.get(key);
+        if (flyweight == null) {
+            flyweight = new Flyweight(key);
+            flyweights.put(key, flyweight);
+        }
+        return flyweight;
+    }
+}
+
+// Usage:
+FlyweightFactory factory = new FlyweightFactory();
+Flyweight flyweight = factory.getFlyweight("sharedState");
+flyweight.operation("uniqueState");
+```
+
+## Proxy Pattern
+
+The Proxy pattern provides a surrogate or placeholder for another object to control access to it. This is useful when you want to defer object creation, add access control, or add extra functionality during access to an object.
+
+```java
+interface Subject {
+    void request();
+}
+
+class RealSubject implements Subject {
+    @Override
+    public void request() {
+        // RealSubject-specific implementation
+    }
+}
+
+class Proxy implements Subject {
+    private RealSubject realSubject;
+
+    @Override
+    public void request() {
+        if (realSubject == null) {
+            realSubject = new RealSubject();
+        }
+        realSubject.request();
+    }
+}
+
+// Usage:
+Subject proxy = new Proxy();
+proxy.request();
+```
+
+## Chain of Responsibility Pattern
+
+The Chain of Responsibility pattern gives more than one object a chance to handle a request. Objects in the chain are linked so that the request is passed along the chain until an object handles it.
+
+```java
+abstract class Handler {
+    protected Handler successor;
+
+    public void setSuccessor(Handler successor) {
+        this.successor = successor;
+    }
+
+    public abstract void handleRequest(int request);
+}
+
+class ConcreteHandlerA extends Handler {
+    @Override
+    public void handleRequest(int request) {
+        if (request < 10) {
+            // Handle request
+        } else if (successor != null) {
+            successor.handleRequest(request);
+        }
+    }
+}
+
+class ConcreteHandlerB extends Handler {
+    @Override
+    public void handleRequest(int request) {
+        if (request >= 10 && request < 20) {
+            // Handle request
+        } else if (successor != null) {
+            successor.handleRequest(request);
+        }
+    }
+}
+
+// Usage:
+Handler handlerA = new ConcreteHandlerA();
+Handler handlerB = new ConcreteHandlerB();
+handlerA.setSuccessor(handlerB);
+handlerA.handleRequest(15);
+```
+
+## Command Pattern
+
+The Command pattern turns a request into a standalone object that contains all information about the request. This is useful when you want to parameterize objects with different requests, queue requests, or log requests.
+
+```java
+interface Command {
+    void execute();
+}
+
+class ConcreteCommand implements Command {
+    private Receiver receiver;
+
+    public ConcreteCommand(Receiver receiver) {
+        this.receiver = receiver;
+    }
+
+    @Override
+    public void execute() {
+        receiver.action();
+    }
+}
+
+class Receiver {
+    public void action() {
+        // Implementation
+    }
+}
+
+class Invoker {
+    private Command command;
+
+    public void setCommand(Command command) {
+        this.command = command;
+    }
+
+    public void executeCommand() {
+        command.execute();
+    }
+}
+
+// Usage:
+Receiver receiver = new Receiver();
+Command command = new ConcreteCommand(receiver);
+Invoker invoker = new Invoker();
+invoker.setCommand(command);
+invoker.executeCommand();
+```
+
+## Iterator Pattern
+
+The Iterator pattern provides a way to access the elements of an aggregate object without exposing its underlying representation. This is useful when you want to traverse through different data structures in a uniform way.
+
+```java
+interface Iterator<T> {
+    boolean hasNext();
+    T next();
+}
+
+interface Aggregate<T> {
+    Iterator<T> createIterator();
+}
+
+class ConcreteAggregate implements Aggregate<String> {
+    private List<String> data = new ArrayList<>();
+
+    public void add(String value) {
+        data.add(value);
+    }
+
+    @Override
+    public Iterator<String> createIterator() {
+        return new ConcreteIterator();
+    }
+
+    private class ConcreteIterator implements Iterator<String> {
+        private int currentIndex = 0;
+
+        @Override
+        public boolean hasNext() {
+            return currentIndex < data.size();
+        }
+
+        @Override
+        public String next() {
+            return hasNext() ? data.get(currentIndex++) : null;
+        }
+    }
+}
+
+// Usage:
+ConcreteAggregate aggregate = new ConcreteAggregate();
+aggregate.add("A");
+aggregate.add("B");
+aggregate.add("C");
+
+Iterator<String> iterator = aggregate.createIterator();
+while (iterator.hasNext()) {
+    System.out.println(iterator.next());
+}
+```
+
+## Mediator Pattern
+
+The Mediator pattern defines an object that encapsulates how a set of objects interact. This is useful when you want to manage complex interactions between different objects while minimizing object dependencies.
+
+```java
+interface Mediator {
+    void send(String message, Colleague colleague);
+}
+
+abstract class Colleague {
+    protected Mediator mediator;
+
+    public Colleague(Mediator mediator) {
+        this.mediator = mediator;
+    }
+}
+
+class ConcreteColleagueA extends Colleague {
+    public ConcreteColleagueA(Mediator mediator) {
+        super(mediator);
+    }
+
+    public void send(String message) {
+        mediator.send(message, this);
+    }
+
+    public void receive(String message) {
+        // Handle message
+    }
+}
+
+class ConcreteColleagueB extends Colleague {
+    public ConcreteColleagueB(Mediator mediator) {
+        super(mediator);
+    }
+
+    public void send(String message) {
+        mediator.send(message, this);
+    }
+
+    public void receive(String message) {
+        // Handle message
+    }
+}
+
+class ConcreteMediator implements Mediator {
+    private ConcreteColleagueA colleagueA;
+    private ConcreteColleagueB colleagueB;
+
+    public void setColleagueA(ConcreteColleagueA colleagueA) {
+        this.colleagueA = colleagueA;
+    }
+
+    public void setColleagueB(ConcreteColleagueB colleagueB) {
+        this.colleagueB = colleagueB;
+    }
+
+    @Override
+    public void send(String message, Colleague colleague) {
+        if (colleague == colleagueA) {
+            colleagueB.receive(message);
+        } else {
+            colleagueA.receive(message);
+        }
+    }
+}
+
+// Usage:
+ConcreteMediator mediator = new ConcreteMediator();
+ConcreteColleagueA colleagueA = new ConcreteColleagueA(mediator);
+ConcreteColleagueB colleagueB = new ConcreteColleagueB(mediator);
+mediator.setColleagueA(colleagueA);
+mediator.setColleagueB(colleagueB);
+
+colleagueA.send("Hello from A");
+colleagueB.send("Hello from B");
+```
+
+## Memento Pattern
+
+The Memento pattern captures and externalizes an object's internal state so that the object can be restored to this state later without violating encapsulation. This is useful when you want to save an object's state for later use or when you want to implement undo/redo functionality in an application.
+
+```java
+class Originator {
+    private String state;
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public Memento saveState() {
+        return new Memento(state);
+    }
+
+    public void restoreState(Memento memento) {
+        state = memento.getState();
+    }
+}
+
+class Memento {
+    private String state;
+
+    public Memento(String state) {
+        this.state = state;
+    }
+
+    public String getState() {
+        return state;
+    }
+}
+
+class Caretaker {
+    private List<Memento> mementoList = new ArrayList<>();
+
+    public void add(Memento memento) {
+        mementoList.add(memento);
+    }
+
+    public Memento get(int index) {
+        return mementoList.get(index);
+    }
+}
+
+// Usage:
+Originator originator = new Originator();
+Caretaker caretaker = new Caretaker();
+
+originator.setState("State1");
+caretaker.add(originator.saveState());
+
+originator.setState("State2");
+caretaker.add(originator.saveState());
+
+// Restore state
+originator.restoreState(caretaker.get(0));
+```
+
+## Observer Pattern
+
+The Observer pattern defines a one-to-many dependency between objects so that when one object changes state, all its dependents are notified and updated automatically. This is useful when you want to establish a relationship between objects where a change in one object leads to changes in other objects.
+
+```java
+interface Observer {
+    void update(String message);
+}
+
+interface Subject {
+    void attach(Observer observer);
+    void detach(Observer observer);
+    void notifyObservers();
+}
+
+class ConcreteSubject implements Subject {
+    private List<Observer> observers = new ArrayList<>();
+    private String message;
+
+    public void setMessage(String message) {
+        this.message = message;
+        notifyObservers();
+    }
+
+    @Override
+    public void attach(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void detach(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers() {
+        for (Observer observer : observers) {
+            observer.update(message);
+        }
+    }
+}
+
+class ConcreteObserver implements Observer {
+    private String name;
+
+    public ConcreteObserver(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public void update(String message) {
+        System.out.println(name + ": " + message);
+    }
+}
+
+// Usage:
+ConcreteSubject subject = new ConcreteSubject();
+
+Observer observer1 = new ConcreteObserver("Observer1");
+Observer observer2 = new ConcreteObserver("Observer2");
+
+subject.attach(observer1);
+subject.attach(observer2);
+
+subject.setMessage("Hello, observers!");
+```
+
+## State Pattern
+
+The State pattern allows an object to alter its behavior when its internal state changes. The object will appear to change its class. This is useful when you want to manage the behavior of an object depending on its current state.
+
+```java
+interface State {
+    void handle();
+}
+
+class ConcreteStateA implements State {
+    @Override
+    public void handle() {
+        // Implementation for state A
+    }
+}
+
+class ConcreteStateB implements State {
+    @Override
+    public void handle() {
+        // Implementation for state B
+    }
+}
+
+class Context {
+    private State state;
+
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    public void handle() {
+        state.handle();
+    }
+}
+
+// Usage:
+Context context = new Context();
+State stateA = new ConcreteStateA();
+State stateB = new ConcreteStateB();
+
+context.setState(stateA);
+context.handle();
+
+context.setState(stateB);
+context.handle();
+```
+
+## Strategy Pattern
+
+The Strategy pattern defines a family of algorithms, encapsulates each one, and makes them interchangeable. This is useful when you want to perform different tasks that can be done in different ways, and you want to be able to switch between the algorithms easily.
+
+```java
+interface Strategy {
+    void execute();
+}
+
+class ConcreteStrategyA implements Strategy {
+    @Override
+    public void execute() {
+        // Implementation for strategy A
+    }
+}
+
+class ConcreteStrategyB implements Strategy {
+    @Override
+    public void execute() {
+        // Implementation for strategy B
+    }
+}
+
+class Context {
+    private Strategy strategy;
+
+    public void setStrategy(Strategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public void executeStrategy() {
+        strategy.execute();
+    }
+}
+
+// Usage:
+Context context = new Context();
+Strategy strategyA = new ConcreteStrategyA();
+Strategy strategyB = new ConcreteStrategyB();
+
+context.setStrategy(strategyA);
+context.executeStrategy();
+
+context.setStrategy(strategyB);
+context.executeStrategy();
+```
+
+## Template Method Pattern
+
+The Template Method pattern defines the skeleton of an algorithm in a method, deferring some steps to subclasses. This is useful when you want to define the structure of an algorithm but allow subclasses to redefine certain steps of the algorithm without changing the algorithm's structure.
+
+```java
+abstract class AbstractClass {
+    public final void templateMethod() {
+        primitiveOperation1();
+        primitiveOperation2();
+        // Other steps
+    }
+
+    public abstract void primitiveOperation1();
+
+    public abstract void primitiveOperation2();
+}
+
+class ConcreteClass extends AbstractClass {
+    @Override
+    public void primitiveOperation1() {
+        // Implementation for step1
+    }
+
+    @Override
+    public void primitiveOperation2() {
+        // Implementation for step2
+    }
+}
+
+// Usage:
+AbstractClass concreteClass = new ConcreteClass();
+concreteClass.templateMethod();
+```
+
+## Visitor Pattern
+
+The Visitor pattern allows you to add new operations to a set of classes without modifying the classes. Instead, you create a new class that implements the new operation and visits the existing classes. This is useful when you want to extend the functionality of a set of classes without modifying their implementation.
+
+```java
+interface Visitor {
+    void visitConcreteElementA(ConcreteElementA elementA);
+    void visitConcreteElementB(ConcreteElementB elementB);
+}
+
+class ConcreteVisitor1 implements Visitor {
+    @Override
+    public void visitConcreteElementA(ConcreteElementA elementA) {
+        // Implementation for visiting ConcreteElementA in ConcreteVisitor1
+    }
+
+    @Override
+    public void visitConcreteElementB(ConcreteElementB elementB) {
+        // Implementation for visiting ConcreteElementB in ConcreteVisitor1
+    }
+}
+
+interface Element {
+    void accept(Visitor visitor);
+}
+
+class ConcreteElementA implements Element {
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visitConcreteElementA(this);
+    }
+}
+
+class ConcreteElementB implements Element {
+    @Override
+    public void accept(Visitor visitor) {
+        visitor.visitConcreteElementB(this);
+    }
+}
+
+// Usage:
+Element elementA = new ConcreteElementA();
+Element elementB = new ConcreteElementB();
+Visitor visitor = new ConcreteVisitor1();
+
+elementA.accept(visitor);
+elementB.accept(visitor);
+```
+
+These design patterns and code snippets provide a foundation for creating maintainable and extensible Java applications. By understanding these patterns and applying them appropriately, you can create higher-quality software that is easier to understand and modify.
