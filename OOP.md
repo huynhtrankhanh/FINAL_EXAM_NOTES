@@ -1682,3 +1682,45 @@ In summary:
 - private: accessible only within the class it's defined in.
 - protected: accessible within the class it's defined in, its subclasses, and classes in the same package.
 - public: accessible from any class, regardless of package or inheritance.
+
+```java
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+
+public class SimpleIOExample {
+
+    public static void main(String[] args) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        PrintWriter writer = new PrintWriter(System.out, true);
+
+        writer.println("Welcome to Simple I/O Example!");
+
+        try {
+            writer.print("Enter your name: ");
+            String name = reader.readLine();
+
+            writer.print("Enter your age: ");
+            int age = Integer.parseInt(reader.readLine());
+
+            writer.print("Enter your height (in meters): ");
+            float height = Float.parseFloat(reader.readLine());
+
+            writer.print("Do you love programming? (true/false): ");
+            boolean lovesProgramming = Boolean.parseBoolean(reader.readLine());
+
+            writer.println("\nYour details:");
+            writer.println("Name: " + name);
+            writer.println("Age: " + age);
+            writer.println("Height: " + height + " meters");
+            writer.println("Loves Programming: " + lovesProgramming);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+}
+```
+This Java program demonstrates simple input/output operations using stdin (System.in, BufferedReader) and stdout (System.out, PrintWriter). It reads a user's name, age, height, and asks whether they love programming, and then prints the input back to the console.
