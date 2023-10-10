@@ -221,3 +221,69 @@ sltu $dest, $src1, $src2   # $dest = ($src1 < $src2) ? 1 : 0 (unsigned)
 ```
 
 These are some of the fundamental arithmetic and logic instructions available in the MIPS architecture. They are essential for performing mathematical calculations and making logical decisions in MIPS assembly language programming.
+
+Certainly, here's a Markdown document that exclusively covers bitwise instructions in the MIPS architecture:
+
+# MIPS Bitwise Instructions
+
+## Introduction
+MIPS architecture provides a set of bitwise instructions for performing operations at the bit level. These instructions allow you to manipulate individual bits within registers, making them useful for tasks such as bit masking, setting or clearing specific bits, and checking bit values.
+
+## Bitwise AND (`and`)
+
+The `and` instruction performs a bitwise AND operation between two values and stores the result in the destination register.
+
+```assembly
+and $dest, $src1, $src2   # $dest = $src1 & $src2
+```
+
+## Bitwise OR (`or`)
+
+The `or` instruction performs a bitwise OR operation between two values and stores the result in the destination register.
+
+```assembly
+or $dest, $src1, $src2   # $dest = $src1 | $src2
+```
+
+## Bitwise XOR (`xor`)
+
+The `xor` instruction performs a bitwise XOR operation between two values and stores the result in the destination register.
+
+```assembly
+xor $dest, $src1, $src2   # $dest = $src1 ^ $src2
+```
+
+## Bitwise NOR (`nor`)
+
+The `nor` instruction performs a bitwise NOR operation between two values and stores the result in the destination register.
+
+```assembly
+nor $dest, $src1, $src2   # $dest = ~($src1 | $src2)
+```
+
+## Bitwise NOT (`not`)
+
+The `not` instruction performs a bitwise NOT operation on a single value and stores the result in the destination register.
+
+```assembly
+not $dest, $src   # $dest = ~$src
+```
+
+## Bitwise Shift Left (`sll`) and Shift Right (`srl`)
+
+The `sll` instruction performs a logical left shift on a value, effectively shifting its bits to the left. The `srl` instruction performs a logical right shift, shifting bits to the right.
+
+```assembly
+sll $dest, $src, shift_amount   # $dest = $src << shift_amount
+srl $dest, $src, shift_amount   # $dest = $src >> shift_amount (logical)
+```
+
+## Bitwise Shift Right Arithmetic (`sra`)
+
+The `sra` instruction performs an arithmetic right shift on a value, shifting bits to the right while preserving the sign bit.
+
+```assembly
+sra $dest, $src, shift_amount   # $dest = $src >> shift_amount (arithmetic)
+```
+
+These bitwise instructions provide powerful tools for manipulating individual bits and performing bit-level operations in MIPS assembly language programming. They are essential for tasks such as bitmasking, data compression, and cryptography algorithms.
