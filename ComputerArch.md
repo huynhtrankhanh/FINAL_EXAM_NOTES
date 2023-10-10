@@ -138,3 +138,86 @@ Binary exponentiation is an efficient algorithm to calculate `a^b` for integer `
 ```
 
 This expanded document includes information on working with arrays in MIPS, implementing prefix sum, and performing binary exponentiation. Please make sure to adapt and modify the code as needed for your specific requirements and MIPS assembly environment.
+
+Certainly, here's a Markdown document that exclusively covers logic and arithmetic instructions in the MIPS architecture:
+
+# MIPS Logic and Arithmetic Instructions
+
+## Introduction
+MIPS architecture provides a wide range of logic and arithmetic instructions for data manipulation and computation. These instructions are essential for performing mathematical operations and logical comparisons in assembly language programming.
+
+## Arithmetic Instructions
+
+### `add` - Addition
+The `add` instruction adds two values and stores the result in the destination register.
+
+```assembly
+add $dest, $src1, $src2   # $dest = $src1 + $src2
+```
+
+### `sub` - Subtraction
+The `sub` instruction subtracts one value from another and stores the result in the destination register.
+
+```assembly
+sub $dest, $src1, $src2   # $dest = $src1 - $src2
+```
+
+### `mul` - Multiplication
+The `mul` instruction multiplies two values and stores the result in the destination registers. The high-order bits of the result are stored in the destination register specified and the low-order bits in the next register.
+
+```assembly
+mul $dest_hi, $dest_lo, $src1, $src2   # $dest_hi:$dest_lo = $src1 * $src2
+```
+
+### `div` - Division
+The `div` instruction divides one value by another and stores the quotient in the destination register specified and the remainder in the next register.
+
+```assembly
+div $dest, $src1, $src2   # $dest = $src1 / $src2
+```
+
+## Logical Instructions
+
+### `and` - Bitwise AND
+The `and` instruction performs a bitwise AND operation between two values and stores the result in the destination register.
+
+```assembly
+and $dest, $src1, $src2   # $dest = $src1 & $src2
+```
+
+### `or` - Bitwise OR
+The `or` instruction performs a bitwise OR operation between two values and stores the result in the destination register.
+
+```assembly
+or $dest, $src1, $src2   # $dest = $src1 | $src2
+```
+
+### `xor` - Bitwise XOR
+The `xor` instruction performs a bitwise XOR operation between two values and stores the result in the destination register.
+
+```assembly
+xor $dest, $src1, $src2   # $dest = $src1 ^ $src2
+```
+
+### `nor` - Bitwise NOR
+The `nor` instruction performs a bitwise NOR operation between two values and stores the result in the destination register.
+
+```assembly
+nor $dest, $src1, $src2   # $dest = ~($src1 | $src2)
+```
+
+### `slt` - Set Less Than
+The `slt` instruction compares two values and sets the destination register to 1 if the first value is less than the second, otherwise, it sets it to 0.
+
+```assembly
+slt $dest, $src1, $src2   # $dest = ($src1 < $src2) ? 1 : 0
+```
+
+### `sltu` - Set Less Than Unsigned
+The `sltu` instruction compares two values as unsigned integers and sets the destination register to 1 if the first value is less than the second, otherwise, it sets it to 0.
+
+```assembly
+sltu $dest, $src1, $src2   # $dest = ($src1 < $src2) ? 1 : 0 (unsigned)
+```
+
+These are some of the fundamental arithmetic and logic instructions available in the MIPS architecture. They are essential for performing mathematical calculations and making logical decisions in MIPS assembly language programming.
