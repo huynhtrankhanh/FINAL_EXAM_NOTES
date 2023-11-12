@@ -751,3 +751,103 @@ public class Main {
 ```
 
 This code defines a `Node` class to represent the elements of the linked list and a `CircularLinkedList` class to manage the circular linked list. The `addToEnd` method adds a new node to the end of the list, and the `display` method prints the elements of the circular linked list. Finally, the `Main` class demonstrates the usage of the circular linked list.
+
+Certainly! Here's a simple Java implementation of a Stack using two Queues:
+
+```java
+import java.util.LinkedList;
+import java.util.Queue;
+
+class StackUsingQueue {
+    private Queue<Integer> mainQueue = new LinkedList<>();
+    private Queue<Integer> auxiliaryQueue = new LinkedList<>();
+
+    public void push(int value) {
+        auxiliaryQueue.add(value);
+
+        while (!mainQueue.isEmpty()) {
+            auxiliaryQueue.add(mainQueue.remove());
+        }
+
+        // Swap the queues
+        Queue<Integer> temp = mainQueue;
+        mainQueue = auxiliaryQueue;
+        auxiliaryQueue = temp;
+    }
+
+    public int pop() {
+        if (mainQueue.isEmpty()) {
+            throw new IllegalStateException("Stack is empty");
+        }
+
+        return mainQueue.remove();
+    }
+
+    public boolean isEmpty() {
+        return mainQueue.isEmpty();
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        StackUsingQueue stack = new StackUsingQueue();
+
+        stack.push(1);
+        stack.push(2);
+        stack.push(3);
+
+        while (!stack.isEmpty()) {
+            System.out.println(stack.pop());
+        }
+    }
+}
+```
+
+And here's a Java implementation of a Queue using two Stacks:
+
+```java
+import java.util.Stack;
+
+class QueueUsingStack {
+    private Stack<Integer> enqueueStack = new Stack<>();
+    private Stack<Integer> dequeueStack = new Stack<>();
+
+    public void enqueue(int value) {
+        enqueueStack.push(value);
+    }
+
+    public int dequeue() {
+        if (dequeueStack.isEmpty()) {
+            if (enqueueStack.isEmpty()) {
+                throw new IllegalStateException("Queue is empty");
+            }
+
+            while (!enqueueStack.isEmpty()) {
+                dequeueStack.push(enqueueStack.pop());
+            }
+        }
+
+        return dequeueStack.pop();
+    }
+
+    public boolean isEmpty() {
+        return enqueueStack.isEmpty() && dequeueStack.isEmpty();
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        QueueUsingStack queue = new QueueUsingStack();
+
+        queue.enqueue(1);
+        queue.enqueue(2);
+        queue.enqueue(3);
+
+        while (!queue.isEmpty()) {
+            System.out.println(queue.dequeue());
+        }
+    }
+}
+```
+
+These implementations demonstrate how to achieve a stack using queues and a queue using stacks in Java.
