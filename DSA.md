@@ -630,3 +630,64 @@ public class BinarySearchPredicate {
 ```
 
 This example uses a predicate that checks if `x * x >= 16` and finds the smallest `x` that satisfies the predicate.
+
+Certainly! Here's a basic implementation of a doubly linked list in Java:
+
+```java
+class Node {
+    int data;
+    Node prev;
+    Node next;
+
+    public Node(int data) {
+        this.data = data;
+        this.prev = null;
+        this.next = null;
+    }
+}
+
+class DoublyLinkedList {
+    private Node head;
+    private Node tail;
+
+    public DoublyLinkedList() {
+        this.head = null;
+        this.tail = null;
+    }
+
+    public void addToEnd(int data) {
+        Node newNode = new Node(data);
+        if (head == null) {
+            head = newNode;
+            tail = newNode;
+        } else {
+            tail.next = newNode;
+            newNode.prev = tail;
+            tail = newNode;
+        }
+    }
+
+    public void display() {
+        Node current = head;
+        while (current != null) {
+            System.out.print(current.data + " ");
+            current = current.next;
+        }
+        System.out.println();
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        DoublyLinkedList dll = new DoublyLinkedList();
+
+        dll.addToEnd(1);
+        dll.addToEnd(2);
+        dll.addToEnd(3);
+
+        dll.display();
+    }
+}
+```
+
+This code defines a `Node` class for the elements of the doubly linked list and a `DoublyLinkedList` class with basic operations like adding to the end and displaying the list. You can customize it based on your specific needs.
