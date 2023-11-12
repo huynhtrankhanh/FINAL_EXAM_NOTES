@@ -691,3 +691,63 @@ public class Main {
 ```
 
 This code defines a `Node` class for the elements of the doubly linked list and a `DoublyLinkedList` class with basic operations like adding to the end and displaying the list. You can customize it based on your specific needs.
+
+Certainly! Here's a simple implementation of a circular linked list in Java:
+
+```java
+class Node {
+    int data;
+    Node next;
+
+    public Node(int data) {
+        this.data = data;
+    }
+}
+
+class CircularLinkedList {
+    private Node head;
+    private Node tail;
+
+    public void addToEnd(int data) {
+        Node newNode = new Node(data);
+        if (head == null) {
+            head = newNode;
+            tail = newNode;
+        } else {
+            tail.next = newNode;
+            tail = newNode;
+        }
+        tail.next = head; // Make it circular
+    }
+
+    public void display() {
+        if (head == null) {
+            System.out.println("List is empty.");
+            return;
+        }
+
+        Node current = head;
+        do {
+            System.out.print(current.data + " ");
+            current = current.next;
+        } while (current != head);
+        System.out.println();
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        CircularLinkedList circularList = new CircularLinkedList();
+
+        circularList.addToEnd(1);
+        circularList.addToEnd(2);
+        circularList.addToEnd(3);
+        circularList.addToEnd(4);
+
+        System.out.println("Circular Linked List:");
+        circularList.display();
+    }
+}
+```
+
+This code defines a `Node` class to represent the elements of the linked list and a `CircularLinkedList` class to manage the circular linked list. The `addToEnd` method adds a new node to the end of the list, and the `display` method prints the elements of the circular linked list. Finally, the `Main` class demonstrates the usage of the circular linked list.
