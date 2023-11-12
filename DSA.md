@@ -546,3 +546,87 @@ public class MergeSort {
 ```
 
 Feel free to use and modify these algorithms according to your needs!
+
+Certainly! Here's a simple implementation of binary search in Java for a sorted array of data:
+
+```java
+public class BinarySearch {
+
+    public static int binarySearch(int[] arr, int target) {
+        int left = 0;
+        int right = arr.length - 1;
+
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+
+            if (arr[mid] == target) {
+                return mid;
+            } else if (arr[mid] < target) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+
+        return -1; // Element not found
+    }
+
+    public static void main(String[] args) {
+        int[] sortedArray = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        int target = 7;
+
+        int result = binarySearch(sortedArray, target);
+
+        if (result != -1) {
+            System.out.println("Element found at index: " + result);
+        } else {
+            System.out.println("Element not found in the array.");
+        }
+    }
+}
+```
+
+If you want to perform a binary search on a predicate without an explicit array, you can use a different approach. Instead of an array, you can define the predicate function and perform a binary search on its domain. Here's an example:
+
+```java
+import java.util.function.Predicate;
+
+public class BinarySearchPredicate {
+
+    public static int binarySearch(Predicate<Integer> predicate, int left, int right) {
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+
+            if (predicate.test(mid)) {
+                return mid;
+            } else if (predicate.test(mid + 1)) {
+                return mid + 1;
+            } else if (predicate.test(mid - 1)) {
+                return mid - 1;
+            }
+
+            if (predicate.test(mid)) {
+                right = mid - 2;
+            } else {
+                left = mid + 2;
+            }
+        }
+
+        return -1; // Element not found
+    }
+
+    public static void main(String[] args) {
+        Predicate<Integer> predicate = x -> x * x >= 16; // Example predicate: searching for the smallest x^2 >= 16
+
+        int result = binarySearch(predicate, 0, Integer.MAX_VALUE);
+
+        if (result != -1) {
+            System.out.println("Smallest x such that x^2 >= 16 is: " + result);
+        } else {
+            System.out.println("No such x found.");
+        }
+    }
+}
+```
+
+This example uses a predicate that checks if `x * x >= 16` and finds the smallest `x` that satisfies the predicate.
