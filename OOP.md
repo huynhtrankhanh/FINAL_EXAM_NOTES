@@ -1760,3 +1760,122 @@ public class SimpleIOUsingScanner {
 ```
 
 This Java program demonstrates simple input/output operations using the `Scanner` class. It reads a user's name, age, height, and asks whether they love programming, and then prints the input back to the console.
+
+# Conclusion
+
+Here is a quick comparison between procedural programming and OOP.
+
+This is procedural programming:
+
+```typescript
+// TypeScript
+
+type Triangle = {
+  kind: 'triangle';
+  base: number;
+  height: number;
+};
+
+type Rectangle = {
+  kind: 'rectangle';
+  width: number;
+  height: number;
+};
+
+type Trapezoid = {
+  kind: 'trapezoid';
+  upperBase: number;
+  lowerBase: number;
+  height: number;
+};
+
+type Shape = Triangle | Rectangle | Trapezoid;
+
+function calculateArea(shape: Shape): number {
+  switch (shape.kind) {
+    case 'triangle':
+      return 0.5 * shape.base * shape.height;
+    case 'rectangle':
+      return shape.width * shape.height;
+    case 'trapezoid':
+      return 0.5 * (shape.upperBase + shape.lowerBase) * shape.height;
+  }
+}
+
+// Example usage
+const triangle: Triangle = { kind: 'triangle', base: 4, height: 3 };
+const rectangle: Rectangle = { kind: 'rectangle', width: 5, height: 8 };
+const trapezoid: Trapezoid = { kind: 'trapezoid', upperBase: 6, lowerBase: 8, height: 4 };
+
+console.log(calculateArea(triangle));   // Output: 6
+console.log(calculateArea(rectangle));  // Output: 40
+console.log(calculateArea(trapezoid));  // Output: 28
+```
+
+Now, let's implement the same example in Java using OOP:
+
+```java
+// Java
+
+abstract class Shape {
+    abstract double calculateArea();
+}
+
+class Triangle extends Shape {
+    double base;
+    double height;
+
+    Triangle(double base, double height) {
+        this.base = base;
+        this.height = height;
+    }
+
+    @Override
+    double calculateArea() {
+        return 0.5 * base * height;
+    }
+}
+
+class Rectangle extends Shape {
+    double width;
+    double height;
+
+    Rectangle(double width, double height) {
+        this.width = width;
+        this.height = height;
+    }
+
+    @Override
+    double calculateArea() {
+        return width * height;
+    }
+}
+
+class Trapezoid extends Shape {
+    double upperBase;
+    double lowerBase;
+    double height;
+
+    Trapezoid(double upperBase, double lowerBase, double height) {
+        this.upperBase = upperBase;
+        this.lowerBase = lowerBase;
+        this.height = height;
+    }
+
+    @Override
+    double calculateArea() {
+        return 0.5 * (upperBase + lowerBase) * height;
+    }
+}
+
+// Example usage
+Triangle triangle = new Triangle(4, 3);
+Rectangle rectangle = new Rectangle(5, 8);
+Trapezoid trapezoid = new Trapezoid(6, 8, 4);
+
+System.out.println(triangle.calculateArea());   // Output: 6.0
+System.out.println(rectangle.calculateArea());  // Output: 40.0
+System.out.println(trapezoid.calculateArea());  // Output: 28.0
+```
+
+In TypeScript, we use a discriminated union to define the shape types, and a switch statement to handle different cases. In Java, we use OOP by creating an abstract `Shape` class and extending it for each specific shape, implementing the `calculateArea` method in each subclass.
