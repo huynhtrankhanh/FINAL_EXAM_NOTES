@@ -555,3 +555,108 @@ int main() {
 ```
 
 This algorithm uses a basic proof-of-work approach where threads generate candidate solutions until one is found with 6 leading zero bits when hashed. The user can trigger cancellation by pressing enter, and the threads will gracefully terminate, providing the current solution if found.
+
+Certainly, I'll provide brief code samples for each section to illustrate key concepts. Please note that these examples are concise and meant for educational purposes.
+
+## Section 1: Introduction
+Scheme is a minimalist, functional programming language. It excels in algorithm development due to its simple syntax and emphasis on recursion. Let's explore its features through various examples.
+
+## Section 2: Basics of Scheme
+```scheme
+(define atom-example 42)
+(define list-example '(1 2 3))
+
+(define (square x) (* x x))
+(display (square 5)) ; Output: 25
+```
+
+## Section 3: Recursion Mastery
+```scheme
+(define (factorial n)
+  (if (= n 0) 1
+      (* n (factorial (- n 1)))))
+
+(display (factorial 5)) ; Output: 120
+```
+
+## Section 4: Higher-Order Functions
+```scheme
+(define (apply-twice f x)
+  (f (f x)))
+
+(define (add-one x) (+ x 1))
+
+(display (apply-twice add-one 3)) ; Output: 5
+```
+
+## Section 5: List Manipulation
+```scheme
+(define my-list '(1 2 3 4 5))
+
+(define (sum-list lst)
+  (if (null? lst) 0
+      (+ (car lst) (sum-list (cdr lst)))))
+
+(display (sum-list my-list)) ; Output: 15
+```
+
+## Section 6: Tail Recursion Optimization
+```scheme
+(define (factorial-tail n acc)
+  (if (= n 0) acc
+      (factorial-tail (- n 1) (* n acc))))
+
+(display (factorial-tail 5 1)) ; Output: 120
+```
+
+## Section 7: Lexical Scoping
+```scheme
+(define (outer-func x)
+  (define (inner-func y) (+ x y))
+  inner-func)
+
+(define closure-example (outer-func 10))
+(display (closure-example 5)) ; Output: 15
+```
+
+## Section 8: Memoization Techniques
+```scheme
+(define (memoize f)
+  (let ((cache (make-hash)))
+    (lambda (arg)
+      (if (hash-has-key? cache arg)
+          (hash-ref cache arg)
+          (let ((result (f arg)))
+            (hash-set! cache arg result)
+            result)))))
+
+(define (fibonacci n)
+  (if (or (= n 0) (= n 1)) n
+      (+ (fibonacci (- n 1)) (fibonacci (- n 2)))))
+
+(define memo-fib (memoize fibonacci))
+(display (memo-fib 10)) ; Output: 55
+```
+
+## Section 9: Macros and Metaprogramming
+```scheme
+(define-syntax double
+  (syntax-rules ()
+    ((_ x) (* 2 x))))
+
+(display (double 5)) ; Output: 10
+```
+
+## Section 10: Advanced Algorithm Design Patterns
+```scheme
+(define (quick-sort lst)
+  (if (null? lst) '()
+      (let ((pivot (car lst)))
+        (append (quick-sort (filter (lambda (x) (< x pivot)) (cdr lst)))
+                (list pivot)
+                (quick-sort (filter (lambda (x) (>= x pivot)) (cdr lst)))))))
+
+(display (quick-sort '(3 1 4 1 5 9 2 6))) ; Output: (1 1 2 3 4 5 6 9)
+```
+
+These examples provide a glimpse into the power and expressiveness of Scheme for algorithmic development. Further exploration and practice will deepen your understanding of Scheme's capabilities.
