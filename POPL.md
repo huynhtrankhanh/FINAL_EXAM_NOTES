@@ -482,3 +482,76 @@ void threadFunction() {
 ```
 
 Mastering these concurrency primitives will empower you to build robust and efficient multithreaded applications in C++.
+
+Certainly! Let's create a simple proof-of-work algorithm in C++ using the mentioned concurrency primitives and incorporate user-triggered cancellation:
+
+```cpp
+#include <iostream>
+#include <thread>
+#include <mutex>
+#include <atomic>
+#include <condition_variable>
+
+std::mutex cancelMutex;
+std::condition_variable cancelCondition;
+std::atomic<bool> cancelFlag(false);
+
+std::atomic<bool> solutionFound(false);
+std::string solution;
+
+void workerThread(int threadId) {
+    std::string partialSolution;
+    std::hash<std::string> hashFunction;
+
+    while (!solutionFound) {
+        // Generate a random candidate solution
+        partialSolution = "Candidate" + std::to_string(threadId);
+
+        // Check if the candidate solution meets the proof-of-work criteria (6 leading zero bits)
+        if (hashFunction(partialSolution) % 64 < 6) {
+            std::unique_lock<std::mutex> cancelLock(cancelMutex);
+            if (cancelFlag) {
+                // User-triggered cancellation
+                cancelCondition.notify_all();
+                return;
+            }
+
+            // Update the solution if it meets the criteria
+            solution = partialSolution;
+            solutionFound = true;
+            cancelCondition.notify_all();
+            std::cout << "Solution found by thread " << threadId << ": " << solution << std::endl;
+        }
+    }
+}
+
+void cancelAlgorithm() {
+    std::unique_lock<std::mutex> cancelLock(cancelMutex);
+    cancelFlag = true;
+    cancelCondition.notify_all();
+}
+
+int main() {
+    const int numThreads = 4;
+    std::thread threads[numThreads];
+
+    // Start worker threads
+    for (int i = 0; i < numThreads; ++i) {
+        threads[i] = std::thread(workerThread, i);
+    }
+
+    // Wait for user input to cancel the algorithm
+    std::cout << "Press enter to cancel the proof-of-work algorithm." << std::endl;
+    std::cin.ignore();  // Wait for user input
+    cancelAlgorithm();
+
+    // Wait for worker threads to finish
+    for (int i = 0; i < numThreads; ++i) {
+        threads[i].join();
+    }
+
+    return 0;
+}
+```
+
+This algorithm uses a basic proof-of-work approach where threads generate candidate solutions until one is found with 6 leading zero bits when hashed. The user can trigger cancellation by pressing enter, and the threads will gracefully terminate, providing the current solution if found.
