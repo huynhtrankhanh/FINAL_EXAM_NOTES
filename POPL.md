@@ -154,3 +154,77 @@ This rule `eligible_for_marriage/2` checks if two individuals are eligible for m
 
 ## Conclusion
 Extend your Prolog skills by implementing practical applications like an ECHO program and incorporating complex rules for real-world scenarios, such as assessing marriage eligibility based on ancestral trees, binary tags, and maturity levels. Prolog's logical inference and rule-based nature make it a powerful tool for such applications.
+
+# Scheme Survival Guide
+
+## Introduction to Scheme
+
+### 1. **Overview**
+   Scheme is a minimalist, functional programming language known for its simple syntax and powerful features. It follows the Lisp family of languages and emphasizes the principles of functional programming and lexical scoping.
+
+### 2. **Basics**
+   - **Data Types:** Scheme has a few basic data types, including numbers, symbols, strings, booleans, and lists.
+   - **Functions:** Functions are first-class citizens, allowing them to be passed as arguments and returned as values.
+
+### 3. **Syntax**
+   - **Prefix Notation:** Scheme uses prefix notation for expressions. For example, `(add 2 3)` instead of `2 + 3`.
+   - **Parentheses:** Parentheses are crucial for defining expressions and creating lists.
+
+## Functional Programming in Scheme
+
+### 1. **Pure Functions**
+   Scheme encourages the use of pure functions that produce the same output for the same input, avoiding side effects.
+
+### 2. **Higher-Order Functions**
+   Functions can take functions as arguments or return them. This enables powerful functional programming constructs.
+
+### 3. **Recursion**
+   Scheme relies heavily on recursion for looping and iteration. Tail call optimization is often employed for efficient recursion.
+
+## Key Concepts
+
+### 1. **Lexical Scoping**
+   Scheme uses lexical scoping, meaning variables are resolved based on their lexical context or surrounding code.
+
+### 2. **Closures**
+   Closures allow functions to capture and remember the lexical scope in which they were created, leading to powerful and flexible programming constructs.
+
+### 3. **Dynamic Typing**
+   Scheme is dynamically typed, meaning variable types are determined at runtime.
+
+## Common Operations and Examples
+
+### 1. **List Manipulation**
+   - **Creating Lists:** `(define my-list '(1 2 3))`
+   - **Accessing Elements:** `(car my-list)` returns the first element.
+
+### 2. **Function Definition**
+   - **Defining Functions:** `(define (add x y) (+ x y))`
+
+### 3. **Conditionals**
+   - **If Statement:** `(if (< x 0) "Negative" "Non-negative")`
+
+### 4. **Recursion Example**
+   ```scheme
+   (define (factorial n)
+     (if (= n 0)
+         1
+         (* n (factorial (- n 1)))))
+   ```
+
+## Advanced Topics
+
+### 1. **Macros**
+   Scheme macros allow for code transformations, enabling the creation of domain-specific languages within Scheme itself.
+
+### 2. **Continuations**
+   Continuations provide a way to capture and control the flow of a program, offering advanced control structures.
+
+## Resources
+
+- **Books:** "Structure and Interpretation of Computer Programs" by Harold Abelson and Gerald Jay Sussman.
+- **Online Documentation:** [Racket Documentation](https://docs.racket-lang.org/)
+
+## Conclusion
+
+Scheme's simplicity, functional paradigm, and expressive power make it a valuable language for both beginners and seasoned programmers. Embrace its functional principles and explore the rich ecosystem of libraries and tools available for Scheme development.
