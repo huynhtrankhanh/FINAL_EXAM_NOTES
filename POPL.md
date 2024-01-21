@@ -228,3 +228,146 @@ Extend your Prolog skills by implementing practical applications like an ECHO pr
 ## Conclusion
 
 Scheme's simplicity, functional paradigm, and expressive power make it a valuable language for both beginners and seasoned programmers. Embrace its functional principles and explore the rich ecosystem of libraries and tools available for Scheme development.
+
+# Advanced Scheme Programming
+
+## Prefix Sum
+
+### **Implementation:**
+```scheme
+(define (prefix-sum lst)
+  (let loop ((acc 0) (result '()) (lst lst))
+    (if (null? lst)
+        (reverse result)
+        (loop (+ acc (car lst)) (cons acc result) (cdr lst)))))
+```
+
+### **Explanation:**
+The `prefix-sum` function calculates the prefix sum of a list. It uses tail recursion to accumulate the sum while building a result list. The result is reversed to maintain the original order.
+
+## Binary Search
+
+### **Implementation:**
+```scheme
+(define (binary-search target lst)
+  (let loop ((low 0) (high (- (length lst) 1)))
+    (if (> low high)
+        #f
+        (let* ((mid (quotient (+ low high) 2))
+               (mid-val (list-ref lst mid)))
+          (cond ((= mid-val target) mid)
+                ((< mid-val target) (loop (+ mid 1) high))
+                (else (loop low (- mid 1))))))))
+```
+
+### **Explanation:**
+The `binary-search` function performs a binary search on a sorted list. It uses recursion to narrow down the search range until the target is found or the search range becomes empty.
+
+## Merge Sort
+
+### **Implementation:**
+```scheme
+(define (merge-sort lst)
+  (if (<= (length lst) 1)
+      lst
+      (let* ((mid (quotient (length lst) 2))
+             (left (take lst mid))
+             (right (drop lst mid)))
+        (merge (merge-sort left) (merge-sort right)))))
+```
+
+### **Explanation:**
+The `merge-sort` function sorts a list using the merge sort algorithm. It recursively divides the list into halves, sorts each half, and then merges them back together.
+
+## Subarray Max Sum
+
+### **Implementation:**
+```scheme
+(define (subarray-max-sum lst)
+  (let loop ((current-sum 0) (max-sum 0) (lst lst))
+    (if (null? lst)
+        max-sum
+        (let ((next-val (car lst)))
+          (loop (max 0 (+ current-sum next-val))
+                (max max-sum (+ current-sum next-val))
+                (cdr lst))))))
+```
+
+### **Explanation:**
+The `subarray-max-sum` function finds the maximum sum of a contiguous subarray using Kadane's algorithm. It iterates through the list, maintaining the current sum and updating the maximum sum as it goes.
+
+## Depth-First Search (DFS)
+
+### **Implementation:**
+```scheme
+(define (dfs graph node visited)
+  (unless (memv node visited)
+    (display node)
+    (for-each (lambda (neighbor)
+                (dfs graph neighbor (cons node visited)))
+              (cdr (assoc node graph)))))
+```
+
+### **Explanation:**
+The `dfs` function performs a Depth-First Search on a graph represented as an adjacency list. It recursively explores each vertex's neighbors, marking visited nodes to avoid cycles.
+
+## Breadth-First Search (BFS)
+
+### **Implementation:**
+```scheme
+(define (bfs graph start-node)
+  (define (bfs-helper queue visited)
+    (cond ((null? queue) '())
+          (else
+           (let ((current-node (car queue))
+                 (rest (cdr queue)))
+             (unless (memv current-node visited)
+               (display current-node)
+               (let ((neighbors (cdr (assoc current-node graph))))
+                 (let ((new-nodes (filter (lambda (neighbor)
+                                            (not (memv neighbor visited)))
+                                          neighbors)))
+                   (bfs-helper (append rest new-nodes) (cons current-node visited))))))))
+  (bfs-helper (list start-node) '()))
+```
+
+### **Explanation:**
+The `bfs` function performs a Breadth-First Search on a graph represented as an adjacency list. It uses a queue to explore neighbors level by level, ensuring all vertices at the current level are visited before moving to the next level.
+
+## Dijkstra's Algorithm
+
+### **Implementation:**
+```scheme
+(define (dijkstra graph start-node)
+  (define (find-min-distance unvisited distances)
+    (let ((min-pair (apply min distances)))
+      (list (car min-pair) (cdr min-pair))))
+  
+  (let loop ((current-node start-node)
+             (unvisited (map car graph))
+             (distances (if (= current-node start-node)
+                            (map (lambda (node) (cons node 0)) (map car graph))
+                            (map (lambda (node) (cons node +inf.0)) (map car graph)))))
+    (if (null? unvisited)
+        distances
+        (let* ((neighbors (cdr (assoc current-node graph)))
+               (current-distance (cdr (assoc current-node distances)))
+               (unvisited-neighbors (filter (lambda (neighbor)
+                                              (memv neighbor unvisited))
+                                            neighbors)))
+          (for-each (lambda (neighbor)
+                      (let* ((edge-distance (cdr (assoc (car neighbor) neighbors)))
+                             (new-distance (+ current-distance edge-distance)))
+                        (when (< new-distance (cdr (assoc (car neighbor) distances)))
+                          (set! distances (assoc-set (car neighbor) distances new-distance))))))
+                    unvisited-neighbors)
+          (let* ((next-node-pair (find-min-distance unvisited distances))
+                 (next-node (car next-node-pair)))
+            (loop next-node (remove next-node unvisited) distances))))))
+
+```
+
+### **Explanation:**
+The `dijkstra` function implements Dijkstra's algorithm to find the shortest path from a start node to all other nodes in a weighted graph represented as an adjacency list. It iteratively selects the node with the minimum distance and updates the distances to its neighbors.
+
+These Scheme implementations cover a range of algorithms and techniques, providing a foundation for solving diverse computational problems. Understanding these examples will enhance your ability to express complex ideas and algorithms using Scheme.
