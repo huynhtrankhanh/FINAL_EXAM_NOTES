@@ -371,3 +371,114 @@ The `bfs` function performs a Breadth-First Search on a graph represented as an 
 The `dijkstra` function implements Dijkstra's algorithm to find the shortest path from a start node to all other nodes in a weighted graph represented as an adjacency list. It iteratively selects the node with the minimum distance and updates the distances to its neighbors.
 
 These Scheme implementations cover a range of algorithms and techniques, providing a foundation for solving diverse computational problems. Understanding these examples will enhance your ability to express complex ideas and algorithms using Scheme.
+
+### Concurrency Primitive Survival Guide in C++
+
+Concurrency is crucial for efficient and responsive software. Here's a survival guide featuring classic concurrency algorithms in C++:
+
+#### 1. **Mutexes:**
+   - Use `std::mutex` to protect critical sections.
+   - Always employ RAII with `std::lock_guard` to ensure automatic unlocking.
+
+```cpp
+#include <mutex>
+
+std::mutex myMutex;
+
+void criticalSection() {
+    std::lock_guard<std::mutex> lock(myMutex);
+    // Critical section code
+}
+```
+
+#### 2. **Atomic Operations:**
+   - Leverage `std::atomic` for lock-free operations.
+   - It's essential for shared data in multithreaded environments.
+
+```cpp
+#include <atomic>
+
+std::atomic<int> sharedValue;
+
+void atomicOperation() {
+    sharedValue.fetch_add(1, std::memory_order_relaxed);
+}
+```
+
+#### 3. **Condition Variables:**
+   - Use `std::condition_variable` for synchronization between threads.
+   - Avoid busy-waiting; instead, wait on a condition.
+
+```cpp
+#include <condition_variable>
+
+std::mutex myMutex;
+std::condition_variable myCondition;
+
+void waitForSignal() {
+    std::unique_lock<std::mutex> lock(myMutex);
+    myCondition.wait(lock);
+    // Continue after receiving signal
+}
+
+void sendSignal() {
+    myCondition.notify_one();
+}
+```
+
+#### 4. **Read-Write Locks:**
+   - Implement a read-write lock for scenarios with frequent reads.
+   - Balances between read and write access efficiently.
+
+```cpp
+#include <shared_mutex>
+
+std::shared_mutex rwLock;
+
+void readOperation() {
+    std::shared_lock<std::shared_mutex> lock(rwLock);
+    // Read operation
+}
+
+void writeOperation() {
+    std::unique_lock<std::shared_mutex> lock(rwLock);
+    // Write operation
+}
+```
+
+#### 5. **Semaphore:**
+   - Create a semaphore using `std::counting_semaphore`.
+   - Useful for managing a limited resource pool.
+
+```cpp
+#include <semaphore>
+
+std::counting_semaphore<int> mySemaphore(5); // Initialize with maximum resource count
+
+void acquireResource() {
+    mySemaphore.acquire();
+    // Critical section with resource
+}
+
+void releaseResource() {
+    mySemaphore.release();
+}
+```
+
+#### 6. **Barrier:**
+   - Implement a barrier to synchronize a group of threads.
+   - Threads wait at the barrier until all have arrived.
+
+```cpp
+#include <barrier>
+
+std::barrier myBarrier(3); // Initialize with the number of participating threads
+
+void threadFunction() {
+    // Code before synchronization point
+    myBarrier.arrive_and_wait(); // Synchronization point
+    // Code after synchronization point
+}
+```
+
+Mastering these concurrency primitives will empower you to build robust and efficient multithreaded applications in C++.
