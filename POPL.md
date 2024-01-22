@@ -771,3 +771,32 @@ fi
 This checks if the string consists only of numeric digits.
 
 Feel free to adapt these examples to suit your specific needs and input data.
+
+Certainly! Here's a simple Bash script that continuously reads an integer from the user and outputs its square:
+
+```bash
+#!/bin/bash
+
+while true; do
+  echo "Enter an integer (or 'q' to quit):"
+  read input
+
+  # Check if the user wants to quit
+  if [ "$input" == "q" ]; then
+    echo "Exiting program."
+    break
+  fi
+
+  # Check if input is a valid integer
+  if [[ "$input" =~ ^[0-9]+$ ]]; then
+    square=$((input * input))
+    echo "Square of $input is: $square"
+  else
+    echo "Invalid input. Please enter a valid integer or 'q' to quit."
+  fi
+done
+```
+
+Save this script in a file (e.g., `square_program.sh`) and make it executable using `chmod +x square_program.sh`. Then, you can run it using `./square_program.sh` in your terminal.
+
+This script will continually prompt the user to enter an integer, calculate the square, and display the result until the user enters 'q' to quit the program.
