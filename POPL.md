@@ -660,3 +660,114 @@ Scheme is a minimalist, functional programming language. It excels in algorithm 
 ```
 
 These examples provide a glimpse into the power and expressiveness of Scheme for algorithmic development. Further exploration and practice will deepen your understanding of Scheme's capabilities.
+
+Sure, let's break down each topic in a brief tutorial using Bash:
+
+### Prefix Sum:
+Prefix sum is a technique where each element in an array is replaced by the sum of itself and all the previous elements. In Bash, you can achieve this with a loop or using the `awk` command:
+
+```bash
+arr=(1 2 3 4 5)
+sum=0
+
+for i in "${!arr[@]}"; do
+  sum=$((sum + arr[i]))
+  arr[i]=$sum
+done
+
+echo "${arr[@]}"
+```
+
+### Knapsack:
+The knapsack problem involves selecting a subset of items with maximum total value, given a constraint on the total weight. Here's a simple Bash implementation using dynamic programming:
+
+```bash
+weights=(2 3 4 5)
+values=(3 4 5 6)
+capacity=5
+
+declare -A dp
+
+for ((i = 0; i <= capacity; i++)); do
+  dp[0,$i]=0
+done
+
+for ((i = 1; i <= ${#weights[@]}; i++)); do
+  for ((j = 0; j <= capacity; j++)); do
+    dp[$i,$j]=$((dp[$((i-1)),$j]))
+
+    if [ $((j - weights[i-1])) -ge 0 ]; then
+      dp[$i,$j]=$((dp[$i,$j] > dp[$((i-1)),$((j-weights[i-1]))] + values[i-1] ? dp[$i,$j] : dp[$((i-1)),$((j-weights[i-1]))] + values[i-1]))
+    fi
+  done
+done
+
+echo "Maximum value: ${dp[${#weights[@]},$capacity]}"
+```
+
+### Replace Text:
+Replacing text in a file can be done using the `sed` command. Here's an example:
+
+```bash
+sed -i 's/old_text/new_text/g' filename.txt
+```
+
+This replaces all occurrences of 'old_text' with 'new_text' in the specified file.
+
+### Find Most Frequent Word:
+To find the most frequent word in a text file, you can use a combination of `tr`, `sort`, `uniq`, and `awk`:
+
+```bash
+cat filename.txt | tr -s '[:space:]' '\n' | sort | uniq -c | sort -nr | awk '{print $2; exit}'
+```
+
+This pipeline breaks down the text into words, counts their occurrences, and outputs the most frequent word.
+
+### Binary Search:
+Binary search is a divide-and-conquer algorithm to find a target element in a sorted array. Here's a simple Bash implementation:
+
+```bash
+binary_search() {
+  local arr=("$@")
+  local target=$1
+  local low=0
+  local high=$(( ${#arr[@]} - 1 ))
+
+  while [ $low -le $high ]; do
+    local mid=$(( (low + high) / 2 ))
+    local guess=${arr[mid]}
+
+    if [ $guess -eq $target ]; then
+      echo "Element found at index $mid"
+      return
+    elif [ $guess -lt $target ]; then
+      low=$((mid + 1))
+    else
+      high=$((mid - 1))
+    fi
+  done
+
+  echo "Element not found"
+}
+
+arr=(1 2 3 4 5 6 7 8 9)
+binary_search 5
+```
+
+### Regex:
+Bash supports regular expressions with the `=~` operator. Here's a simple example:
+
+```bash
+pattern="^[0-9]+$"
+string="123"
+
+if [[ $string =~ $pattern ]]; then
+  echo "String is a number"
+else
+  echo "String is not a number"
+fi
+```
+
+This checks if the string consists only of numeric digits.
+
+Feel free to adapt these examples to suit your specific needs and input data.
