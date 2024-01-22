@@ -800,3 +800,100 @@ done
 Save this script in a file (e.g., `square_program.sh`) and make it executable using `chmod +x square_program.sh`. Then, you can run it using `./square_program.sh` in your terminal.
 
 This script will continually prompt the user to enter an integer, calculate the square, and display the result until the user enters 'q' to quit the program.
+
+Certainly! Here's a concise Haskell survival guide covering syntax and implementations of some algorithms:
+
+### Haskell Syntax:
+
+#### Basic Concepts:
+- **Immutable Variables:** Variables in Haskell are immutable. Once assigned, their values cannot be changed.
+- **Pure Functions:** Haskell encourages pure functions, which do not have side effects and always produce the same output for the same input.
+- **Pattern Matching:** A powerful feature for deconstructing data structures.
+
+#### Basic Syntax:
+```haskell
+-- Variable binding
+let x = 5
+
+-- Function definition
+add :: Int -> Int -> Int
+add a b = a + b
+
+-- Pattern matching
+factorial :: Int -> Int
+factorial 0 = 1
+factorial n = n * factorial (n - 1)
+```
+
+### Algorithm Implementations:
+
+#### List Sum:
+```haskell
+listSum :: [Int] -> Int
+listSum [] = 0
+listSum (x:xs) = x + listSum xs
+```
+
+#### Bubble Sort:
+```haskell
+bubbleSort :: Ord a => [a] -> [a]
+bubbleSort [] = []
+bubbleSort lst =
+  let sorted = bubbleSort (init lst)
+  in case compare (last sorted) (last lst) of
+       GT -> sorted ++ [last lst]
+       _  -> bubbleSort (sorted ++ [last lst])
+```
+
+#### Prefix Sum:
+```haskell
+prefixSum :: [Int] -> [Int]
+prefixSum = scanl (+) 0
+```
+
+#### Binary Search:
+```haskell
+binarySearch :: Ord a => [a] -> a -> Maybe Int
+binarySearch [] _ = Nothing
+binarySearch list target =
+  let binarySearch' low high
+        | low > high = Nothing
+        | otherwise =
+            let mid = (low + high) `div` 2
+            in case compare (list !! mid) target of
+                 EQ -> Just mid
+                 LT -> binarySearch' (mid + 1) high
+                 GT -> binarySearch' low (mid - 1)
+  in binarySearch' 0 (length list - 1)
+```
+
+#### Knapsack:
+```haskell
+knapsack :: Int -> [(Int, Int)] -> Int
+knapsack _ [] = 0
+knapsack capacity ((weight, value):items)
+  | weight > capacity = knapsack capacity items
+  | otherwise = max (value + knapsack (capacity - weight) items) (knapsack capacity items)
+```
+
+#### Merge Sort:
+```haskell
+mergeSort :: Ord a => [a] -> [a]
+mergeSort [] = []
+mergeSort [x] = [x]
+mergeSort xs =
+  let merge :: Ord a => [a] -> [a] -> [a]
+      merge [] ys = ys
+      merge xs [] = xs
+      merge (x:xs) (y:ys)
+        | x <= y    = x : merge xs (y:ys)
+        | otherwise = y : merge (x:xs) ys
+
+      split :: [a] -> ([a], [a])
+      split lst = splitAt (length lst `div` 2) lst
+
+      (left, right) = split xs
+  in merge (mergeSort left) (mergeSort right)
+```
+
+Feel free to explore and adapt these snippets based on your needs!
