@@ -47,3 +47,73 @@ TCP Vegas employs an RTT rejection heuristic to filter out RTT measurements that
 ## Conclusion
 
 TCP Vegas represents a fundamental shift in TCP congestion control strategies by relying on proactive measures based on RTT measurements rather than reactive measures such as packet loss detection. By understanding the intricacies of its phases, RTT measurement and adaptation strategies, and the methodologies behind its heuristics, users and developers can better leverage TCP Vegas for efficient and stable network communication.
+
+Expanding upon the initial overview, we delve deeper into TCP Vegas' operational mechanisms, focusing on the mathematical underpinnings and detailed descriptions of its processes.
+
+## TCP Vegas: A Closer Examination
+
+TCP Vegas differentiates itself by emphasizing congestion avoidance through early detection, based on round-trip time (RTT) measurements rather than packet loss as a signal of congestion. This approach relies heavily on carefully calibrated parameters and mathematical models to adjust the congestion window (CWND) size.
+
+### Congestion Window Adjustment
+
+#### Initial Definitions
+- **CWND:** Number of packets that can be sent without waiting for an acknowledgment.
+- **RTT:** Time it takes for a data packet to travel to the destination and back.
+
+#### Slow Start Phase
+
+During Slow Start, TCP Vegas exponentially increases the CWND size to quickly find the network's bandwidth capacity. The CWND is updated as follows:
+
+\[ \text{CWND}_{\text{new}} = \text{CWND}_{\text{current}} + 1 \text{ for every ACK received} \]
+
+This exponential growth continues until the CWND reaches a threshold (`ssthresh`) or until it detects the beginning of congestion through its unique mechanism.
+
+#### Congestion Avoidance Phase
+
+Vegas enters congestion avoidance when it detects that the network is approaching its capacity. Let's define:
+- **BaseRTT:** The minimum RTT measured over the lifetime of the connection, representing an estimate of the minimum delay.
+- **ActualRTT:** The current RTT measurement.
+
+The core of Vegas' congestion avoidance relies on calculating the difference between expected throughput and actual throughput. The expected throughput (`Expected`) is:
+
+\[ \text{Expected Throughput} = \frac{\text{CWND}}{\text{BaseRTT}} \]
+
+The actual throughput (`Actual`) is:
+
+\[ \text{Actual Throughput} = \frac{\text{CWND}}{\text{ActualRTT}} \]
+
+The difference (`Diff`) between `Expected` and `Actual` throughput indicates if there's room to increase CWND or a need to decrease it:
+
+\[ \text{Diff} = \text{Expected Throughput} - \text{Actual Throughput} \]
+
+Based on `Diff`, the adjustment of CWND is determined as follows:
+- If `Diff < Alpha`, increase CWND.
+- If `Diff > Beta`, decrease CWND.
+- If `Alpha <= Diff <= Beta`, maintain CWND.
+
+`Alpha` and `Beta` are predefined thresholds that determine how aggressively Vegas reacts to perceived congestion.
+
+### RTT Measurement and Adjustments
+
+#### RTT Rejection Heuristic
+
+Not all RTT measurements are considered reliable. TCP Vegas employs a rejection algorithm to filter out RTT measurements that are anomalies, possibly due to transient network conditions. This ensures decisions are based on stable and reliable data.
+
+#### Smoothing RTT Measurements
+
+To avoid overreacting to temporary fluctuations, Vegas averages RTT measurements over a window of time. This smoothed RTT (`SmoothedRTT`) is used for calculating the expected and actual throughput. A common method is to use an exponentially weighted moving average (EWMA):
+
+\[ \text{SmoothedRTT}_{\text{new}} = (1 - \epsilon) \cdot \text{SmoothedRTT}_{\text{current}} + \epsilon \cdot \text{ActualRTT} \]
+
+Here, `ε` is a weight factor that determines the importance of the latest RTT measurement in the average.
+
+### Dealing with Network Variability
+
+TCP Vegas uses the `Alpha`, `Beta`, and optionally a `Gamma` parameter to finely control its reaction to network conditions. These thresholds are crucial for tailoring Vegas' behavior to different network environments:
+- `Alpha`: Lower bound for increasing CWND, typically around 1 to 3 packets.
+- `Beta`: Upper bound for decreasing CWND, usually set higher than Alpha, around 3 to 6 packets.
+- `Gamma`: Used for advanced mechanisms, such as adaptive threshold adjustments, although it's less commonly discussed in basic overviews of Vegas.
+
+## Conclusion
+
+TCP Vegas' approach to congestion control represents a sophisticated balance between efficiency and stability, leveraging detailed RTT measurements and carefully calibrated control loops. By understanding the mathematical and algorithmic underpinnings of Vegas' mechanisms, network professionals can better implement, troubleshoot, and optimize TCP Vegas in diverse environments, ensuring smoother and more reliable data transport across networks.
