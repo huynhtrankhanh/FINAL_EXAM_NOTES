@@ -64,7 +64,9 @@ TCP Vegas differentiates itself by emphasizing congestion avoidance through earl
 
 During Slow Start, TCP Vegas exponentially increases the CWND size to quickly find the network's bandwidth capacity. The CWND is updated as follows:
 
-\[ \text{CWND}_{\text{new}} = \text{CWND}_{\text{current}} + 1 \text{ for every ACK received} \]
+```math
+\text{CWND}_{\text{new}} = \text{CWND}_{\text{current}} + 1 \text{ for every ACK received}
+```
 
 This exponential growth continues until the CWND reaches a threshold (`ssthresh`) or until it detects the beginning of congestion through its unique mechanism.
 
@@ -76,15 +78,21 @@ Vegas enters congestion avoidance when it detects that the network is approachin
 
 The core of Vegas' congestion avoidance relies on calculating the difference between expected throughput and actual throughput. The expected throughput (`Expected`) is:
 
-\[ \text{Expected Throughput} = \frac{\text{CWND}}{\text{BaseRTT}} \]
+```math
+\text{Expected Throughput} = \frac{\text{CWND}}{\text{BaseRTT}}
+```
 
 The actual throughput (`Actual`) is:
 
-\[ \text{Actual Throughput} = \frac{\text{CWND}}{\text{ActualRTT}} \]
+```math
+\text{Actual Throughput} = \frac{\text{CWND}}{\text{ActualRTT}}
+```
 
 The difference (`Diff`) between `Expected` and `Actual` throughput indicates if there's room to increase CWND or a need to decrease it:
 
-\[ \text{Diff} = \text{Expected Throughput} - \text{Actual Throughput} \]
+```math
+\text{Diff} = \text{Expected Throughput} - \text{Actual Throughput}
+```
 
 Based on `Diff`, the adjustment of CWND is determined as follows:
 - If `Diff < Alpha`, increase CWND.
@@ -103,7 +111,9 @@ Not all RTT measurements are considered reliable. TCP Vegas employs a rejection 
 
 To avoid overreacting to temporary fluctuations, Vegas averages RTT measurements over a window of time. This smoothed RTT (`SmoothedRTT`) is used for calculating the expected and actual throughput. A common method is to use an exponentially weighted moving average (EWMA):
 
-\[ \text{SmoothedRTT}_{\text{new}} = (1 - \epsilon) \cdot \text{SmoothedRTT}_{\text{current}} + \epsilon \cdot \text{ActualRTT} \]
+```math
+\text{SmoothedRTT}_{\text{new}} = (1 - \epsilon) \cdot \text{SmoothedRTT}_{\text{current}} + \epsilon \cdot \text{ActualRTT}
+```
 
 Here, `ε` is a weight factor that determines the importance of the latest RTT measurement in the average.
 
